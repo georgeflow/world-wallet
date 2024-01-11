@@ -1,0 +1,28 @@
+#root {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  width: 100vw;
+}
+
+.title-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.first-row {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  width: 100%;
+  justify-content: center;
+}
+
+.second-row {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  width: 100%;
+  justify-content: center;
+}

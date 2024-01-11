@@ -1,0 +1,49 @@
+.accounts-div {
+  width: 818px;
+  height: 370px;
+  border-radius: 20px;
+  background: #ededed;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.account-button-div {
+  width: 100%;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding-left: 20px;
+}
+
+.account-boxes {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.balances {
+  width: 307px;
+  height: 296px;
+  border-radius: 20px;
+  background: rgba(130, 197, 125, 0.15);
+}
+
+.balances p {
+  font-size: 21px;
+}
+
+.liabilities {
+  width: 307px;
+  height: 296px;
+  border-radius: 20px;
+  background: rgba(222, 159, 159, 0.15);
+}
+
+.liabilities p {
+  font-size: 21px;
+}
