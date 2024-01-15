@@ -10,6 +10,9 @@
   color-scheme: light dark;
   color: #1E1E1E;
   background-color: #565656;
+
+  background: url('./assets/bg.jpg') center/cover no-repeat fixed;
+  height: 100%; /* Set the height to 100% of the viewport */
 }
 
 body {
