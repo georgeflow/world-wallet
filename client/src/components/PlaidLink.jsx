@@ -7,13 +7,20 @@ export default function PlaidLink({
   updateToken,
   updateData,
   updateLoading,
+  isAuthenticated
 }) {
+  useEffect(() => {
+    if (isAuthenticated)
+      getBalance();
+  }, [])
+
   const onSuccess = useCallback(
     async (publicToken) => {
       // setLoading(true);
       updateLoading(true);
-      await fetch("/api/exchange_public_token", {
+      await fetch("http://localhost:8080/api/exchange_public_token", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -31,7 +38,7 @@ export default function PlaidLink({
       const linkToken = localStorage.getItem("link_token");
       updateToken(linkToken);
     } else {
-      const response = await fetch("/api/create_link_token", {});
+      const response = await fetch("http://localhost:8080/api/create_link_token");
       const data = await response.json();
       updateToken(data.link_token);
       localStorage.setItem("link_token", data.link_token);
@@ -41,7 +48,10 @@ export default function PlaidLink({
   // Fetch balance data
   const getBalance = React.useCallback(async () => {
     updateLoading(true);
-    const response = await fetch("/api/balance", {});
+    const response = await fetch("http://localhost:8080/api/balance", {
+      method: "GET",
+      credentials: "include",
+    });
     const data = await response.json();
     updateData(data);
     updateLoading(false);

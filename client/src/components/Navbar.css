@@ -1,3 +1,9 @@
+.title-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .title-div {
   width: 294px;
   height: 67px;
@@ -5,6 +11,12 @@
   flex-direction: row;
   border-radius: 40px;
   background: #ededed;
+}
+
+.log-in {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
 p {

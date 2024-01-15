@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom';
 const initialState = {
   email: '',
   password: '',
+  firstName: '',
+  lastName: '',
 };
 
-const Login = (props) => {
-  let navigate = useNavigate();
+const Register = (props) => {
+  const navigate = useNavigate();
   const [state, setState] = useState(initialState);
 
   const handleChange = (e) => {
@@ -22,31 +24,29 @@ const Login = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic to send a request to API service /login
-    // REMOVE-START
-    const { email, password } = state;
-    const user = { email, password };
-    const res = await apiService.login(user);
+    // send a request to the API service /register
+    const { email, password, firstName, lastName } = state;
+    const user = { email, password, firstName, lastName };
+    const res = await apiService.register(user);
     if (res.error) {
       alert(`${res.message}`);
       setState(initialState);
     } else {
-      // REMOVE-END
       // This sets isAuthenticated = true and redirects to profile
       props.setIsAuthenticated(true);
       auth.login(() => navigate('/'));
-      // REMOVE-START
     }
-    // REMOVE-END
   };
 
   const validateForm = () => {
-    return !state.email || !state.password;
+    return (
+      !state.email || !state.password || !state.firstName || !state.lastName
+    );
   };
 
   return (
     <section>
-      <h2>Login</h2>
+      <h2>Register</h2>
       <form className="form" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -62,12 +62,26 @@ const Login = (props) => {
           value={state.password}
           onChange={handleChange}
         />
+        <input
+          type="text"
+          placeholder="Name"
+          name="firstName"
+          value={state.firstName}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          placeholder="Nameson"
+          name="lastName"
+          value={state.lastName}
+          onChange={handleChange}
+        />
         <button className="form-submit" type="submit" disabled={validateForm()}>
-          &nbsp;Login&nbsp;
+          &nbsp;Register&nbsp;
         </button>
       </form>
     </section>
   );
 };
 
-export default Login;
+export default Register;

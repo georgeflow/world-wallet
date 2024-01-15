@@ -1,48 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
-import Title from "./components/Title";
-import NetWorth from "./components/NetWorth";
-import Accounts from "./components/Accounts";
-import Graph from "./components/Graph";
-import SavingsGoals from "./components/SavingsGoals";
+import auth from './utils/auth';
+import Navbar from "./components/Navbar";
+import Dashboard from "./components/Dashboard";
 
-export default function App(props) {
-  const [token, setToken] = useState(null);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const updateToken = (newToken) => {
-    setToken(newToken);
-  };
-
-  const updateData = (newData) => {
-    setData(newData);
-  };
-
-  const updateLoading = (newLoading) => {
-    setLoading(newLoading);
-  };
+export default function App() {
+  const initialState = auth.isAuthenticated();
+  const [isAuthenticated, setIsAuthenticated] = useState(initialState);
 
   return (
     <>
-      <div className="title-row">
-        <Title />
-      </div>
-      <div className="first-row">
-        <NetWorth loading={loading} data={data} />
-        <Accounts
-          token={token}
-          updateToken={updateToken}
-          updateData={updateData}
-          updateLoading={updateLoading}
-          loading={loading}
-          data={data}
-        />
-      </div>
-      <div className="second-row">
-        <Graph />
-        <SavingsGoals />
-      </div>
+      <Router>
+        <Navbar isAuthenticated={isAuthenticated}/>
+        <Dashboard setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated}/>
+      </Router>
     </>
   );
 }

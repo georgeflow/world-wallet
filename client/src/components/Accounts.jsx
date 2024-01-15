@@ -9,14 +9,10 @@ export default function Accounts({
   updateLoading,
   loading,
   data,
+  isAuthenticated
 }) {
   let balances = 0;
   let liabilities = 0;
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // const handleButtonClick = () => {
-  //   setIsModalOpen(!isModalOpen);
-  // };
 
   if (!loading && data != null) {
     // Filter depository and investment accounts
@@ -40,6 +36,7 @@ export default function Accounts({
             updateToken={updateToken}
             updateData={updateData}
             updateLoading={updateLoading}
+            isAuthenticated={isAuthenticated}
           />
           <button>+</button>
         </div>
