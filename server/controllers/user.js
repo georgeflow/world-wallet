@@ -1,16 +1,17 @@
 const bcrypt = require("bcrypt");
-const User = require("./../models/user");
 const session = require("express-session");
-const { Configuration, PlaidApi, PlaidEnvironments } = require("plaid");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const User = require("../models/user");
+const { Configuration, PlaidApi, PlaidEnvironments } = require("plaid");
 
 const create = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email: email });
-  if (user)
+  const user = await User.findOne({ email });
+  if (user) {
     return res
       .status(409)
       .send({ error: "409", message: "User already exists" });
+  }
   try {
     if (password === "") throw new Error();
     const hash = await bcrypt.hash(password, 10);
@@ -30,7 +31,7 @@ const create = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email });
     const validatedPass = await bcrypt.compare(password, user.password);
     if (!validatedPass) throw new Error();
     req.session.uid = user._id;
@@ -71,7 +72,7 @@ const store = new MongoDBStore({
   collection: "sessions", // Collection to store sessions in MongoDB
 });
 
-store.on("error", function (error) {
+store.on("error", (error) => {
   console.log("MongoDB session store error:", error);
 });
 
@@ -87,12 +88,12 @@ const config = new Configuration({
   },
 });
 
-//Instantiate the Plaid client with the configuration
+// Instantiate the Plaid client with the configuration
 const client = new PlaidApi(config);
 
-//Creates a Link token and return it
-const createLinkToken = async (req, res, next) => {
-  const tokenResponse = await client.linkTokenCreate({
+// Creates a Link token and return it
+const createLinkTokenUS = async (req, res, next) => {
+  const tokenResponseUS = await client.linkTokenCreate({
     user: { client_user_id: req.sessionID },
     client_name: "worldwallet",
     language: "en",
@@ -100,7 +101,33 @@ const createLinkToken = async (req, res, next) => {
     country_codes: ["US"],
     redirect_uri: process.env.PLAID_SANDBOX_REDIRECT_URI,
   });
-  res.json(tokenResponse.data);
+  res.json(tokenResponseUS.data);
+};
+
+// Creates a Link token and return it
+const createLinkTokenES = async (req, res, next) => {
+  const tokenResponseES = await client.linkTokenCreate({
+    user: { client_user_id: req.sessionID },
+    client_name: "worldwallet",
+    language: "en",
+    products: ["auth", "transactions"],
+    country_codes: ["ES"],
+    redirect_uri: process.env.PLAID_SANDBOX_REDIRECT_URI,
+  });
+  res.json(tokenResponseES.data);
+};
+
+// Creates a Link token and return it
+const createLinkTokenGB = async (req, res, next) => {
+  const tokenResponseGB = await client.linkTokenCreate({
+    user: { client_user_id: req.sessionID },
+    client_name: "worldwallet",
+    language: "en",
+    products: ["auth", "transactions"],
+    country_codes: ["GB"],
+    redirect_uri: process.env.PLAID_SANDBOX_REDIRECT_URI,
+  });
+  res.json(tokenResponseGB.data);
 };
 
 // Exchanges the public token from Plaid Link for an access token
@@ -144,25 +171,6 @@ const exchangePublicToken = async (req, res, next) => {
     // Handle other unexpected errors
     res.status(500).json({ error: "Internal server error" });
   }
-
-  // const exchangeResponse = await client.itemPublicTokenExchange({
-  //   public_token: req.body.public_token,
-  // });
-
-  // // Get balance data
-  // const balanceResponse = await client.accountsBalanceGet({
-  //   access_token: exchangeResponse.data.access_token,
-  // });
-
-  // // Save user and balance data to MongoDB
-  // const user = new User({
-  //   sessionId: req.sessionID,
-  //   accessToken: exchangeResponse.data.access_token,
-  //   balances: balanceResponse.data.accounts,
-  // });
-  // await user.save();
-
-  // res.json(exchangeResponse.data);
 };
 
 const getBalances = async (req, res, next) => {
@@ -196,32 +204,6 @@ const getBalances = async (req, res, next) => {
     // Handle other unexpected errors
     res.status(500).json({ error: "Internal server error" });
   }
-
-  // try {
-  //   // Get the session ID
-  //   const sessionId = req.sessionID;
-
-  //   // Use Mongoose to find the user with the matching session ID
-  //   const user = await User.findOne({ sessionId });
-
-  //   // Check if the user exists
-  //   if (!user) {
-  //     return res.status(404).json({ error: "User not found" });
-  //   }
-
-  //   // Return the user's balance data
-  //   res.json(user.balances);
-  // } catch (error) {
-  //   console.error("Error in /api/balance:", error);
-
-  //   // Handle specific errors
-  //   if (error.name === "CastError" && error.kind === "ObjectId") {
-  //     return res.status(400).json({ error: "Invalid user ID format" });
-  //   }
-
-  //   // Handle other unexpected errors
-  //   res.status(500).json({ error: "Internal server error" });
-  // }
 };
 
 module.exports = {
@@ -229,7 +211,9 @@ module.exports = {
   login,
   profile,
   logout,
-  createLinkToken,
+  createLinkTokenUS,
+  createLinkTokenES,
+  createLinkTokenGB,
   exchangePublicToken,
   getBalances,
 };

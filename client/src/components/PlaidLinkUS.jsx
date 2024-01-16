@@ -1,8 +1,8 @@
 import React, { useEffect, useCallback } from "react";
 import { usePlaidLink } from "react-plaid-link";
-import "./PlaidLink.css";
+import "./PlaidLinkUS.css";
 
-export default function PlaidLink({
+export default function PlaidLinkUS({
   token,
   updateToken,
   updateData,
@@ -38,7 +38,7 @@ export default function PlaidLink({
       const linkToken = localStorage.getItem("link_token");
       updateToken(linkToken);
     } else {
-      const response = await fetch("http://localhost:8080/api/create_link_token");
+      const response = await fetch("http://localhost:8080/api/create_link_token/us");
       const data = await response.json();
       updateToken(data.link_token);
       localStorage.setItem("link_token", data.link_token);
@@ -83,7 +83,7 @@ export default function PlaidLink({
   return (
     <div>
       <button className="plaid-button" onClick={() => open()} disabled={!ready}>
-        <strong>Link account</strong>
+        <strong>🇺🇸 Link US account</strong>
       </button>
     </div>
   );

@@ -1,11 +1,7 @@
-/*
-server.js – Configures the Plaid client and uses Express to defines routes that call Plaid endpoints in the Sandbox environment.Utilizes the official Plaid node.js client library to make calls to the Plaid API.
-*/
-
-require("dotenv").config();
-const express = require("express");
-const session = require("express-session");
-const cors = require("cors");
+require('dotenv').config();
+const express = require('express');
+const session = require('express-session');
+const cors = require('cors');
 const router = require('./router');
 
 const app = express();
@@ -32,7 +28,7 @@ app.use(
       // we would want to set secure=true in a production environment
       secure: false,
     },
-  })
+  }),
 );
 
 app.use(router);

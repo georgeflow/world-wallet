@@ -1,6 +1,8 @@
 import React from "react";
 import "./Accounts.css";
-import PlaidLink from "./PlaidLink";
+import PlaidLinkUS from "./PlaidLinkUS";
+import PlaidLinkES from "./PlaidLinkES";
+import PlaidLinkGB from "./PlaidLinkGB";
 
 export default function Accounts({
   token,
@@ -9,7 +11,7 @@ export default function Accounts({
   updateLoading,
   loading,
   data,
-  isAuthenticated
+  isAuthenticated,
 }) {
   let balances = 0;
   let liabilities = 0;
@@ -31,14 +33,27 @@ export default function Accounts({
     <>
       <div className="accounts-div">
         <div className="account-button-div">
-          <PlaidLink
+          <PlaidLinkUS
             token={token}
             updateToken={updateToken}
             updateData={updateData}
             updateLoading={updateLoading}
             isAuthenticated={isAuthenticated}
           />
-          <button>+</button>
+          <PlaidLinkES
+            token={token}
+            updateToken={updateToken}
+            updateData={updateData}
+            updateLoading={updateLoading}
+            isAuthenticated={isAuthenticated}
+          />
+          <PlaidLinkGB
+            token={token}
+            updateToken={updateToken}
+            updateData={updateData}
+            updateLoading={updateLoading}
+            isAuthenticated={isAuthenticated}
+          />
         </div>
         <div className="account-boxes">
           <div className="balances">

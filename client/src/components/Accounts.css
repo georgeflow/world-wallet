@@ -1,6 +1,6 @@
 .accounts-div {
   width: 818px;
-  height: 370px;
+  height: 500px;
   border-radius: 20px;
   background: #ededed;
   display: flex;
@@ -12,9 +12,9 @@
 .account-button-div {
   width: 100%;
   display: flex;
-  justify-content: end;
+  flex-direction: row;
+  justify-content: space-evenly;
   align-items: center;
-  padding-left: 20px;
 }
 
 .account-boxes {
@@ -25,8 +25,8 @@
 }
 
 .balances {
-  width: 307px;
-  height: 296px;
+  width: 350px;
+  height: 350px;
   border-radius: 20px;
   background: rgba(130, 197, 125, 0.15);
   overflow: scroll;
@@ -42,8 +42,8 @@
 }
 
 .liabilities {
-  width: 307px;
-  height: 296px;
+  width: 350px;
+  height: 350px;
   border-radius: 20px;
   background: rgba(222, 159, 159, 0.15);
   overflow: scroll;

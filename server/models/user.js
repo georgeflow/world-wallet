@@ -1,4 +1,4 @@
-const mongoose = require('./../db.js');
+const mongoose = require('../db');
 
 const userSchema = mongoose.Schema({
   email: {
@@ -20,7 +20,7 @@ const userSchema = mongoose.Schema({
   balances: {
     type: Object,
     default: [],
-  }
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);
