@@ -18,14 +18,14 @@ export default function Accounts({
   liabilities,
   setLiabilities,
 }) {
-  // const [balances, setBalances] = useState([]);
-  // const [liabilities, setLiabilities] = useState([]);
-
   const exchangeRates = {
     USD: 1,
     GBP: 0.79, // Updated: Jan 16 @ 17:06
     EUR: 0.92, // Updated: Jan 16 @ 17:06
   };
+
+  console.log("Balances:", balances)
+  console.log("Liabilities:", liabilities)
 
   useEffect(() => {
     if (!loading && data != null) {
@@ -44,7 +44,7 @@ export default function Accounts({
             exchangeRates[copiedAccount.balances.iso_currency_code];
 
           if (exchangeRate) {
-            if (copiedAccount.balances.available !== null) {
+            if (copiedAccount.balances.available && !copiedAccount.balances.current) {
               copiedAccount.balances.available = Number(
                 (
                   parseFloat(copiedAccount.balances.available) * exchangeRate

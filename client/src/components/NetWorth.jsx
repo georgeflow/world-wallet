@@ -20,14 +20,13 @@ export default function NetWorth({
       } else {
         totalBalance += account.balances.current;
       }
+    }
 
-      // Corrected placement of this block inside the loop
-      for (const account of liabilities) {
-        if (account.balances.current !== null) {
-          totalLiabilities += account.balances.current;
-        } else {
-          totalLiabilities += account.balances.available;
-        }
+    for (const account of liabilities) {
+      if (account.balances.current !== null) {
+        totalLiabilities += account.balances.current;
+      } else {
+        totalLiabilities += account.balances.available;
       }
     }
 
