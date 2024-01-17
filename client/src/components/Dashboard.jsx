@@ -7,7 +7,11 @@ import Profile from "./Profile";
 import Logout from "./Logout";
 import Home from "./Home";
 
-export default function Dashboard({ setIsAuthenticated, isAuthenticated }) {
+export default function Dashboard({
+  setIsAuthenticated,
+  isAuthenticated,
+  currency,
+}) {
   return (
     <>
       <div className="dashboard">
@@ -25,7 +29,12 @@ export default function Dashboard({ setIsAuthenticated, isAuthenticated }) {
             path="/logout"
             element={<Logout setIsAuthenticated={setIsAuthenticated} />}
           />
-          <Route path="/" element={<Home isAuthenticated={isAuthenticated}/>} />
+          <Route
+            path="/"
+            element={
+              <Home isAuthenticated={isAuthenticated} currency={currency} />
+            }
+          />
         </Routes>
       </div>
     </>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Accounts.css";
 import PlaidLinkUS from "./PlaidLinkUS";
 import PlaidLinkES from "./PlaidLinkES";
@@ -12,22 +12,112 @@ export default function Accounts({
   loading,
   data,
   isAuthenticated,
+  currency,
+  balances,
+  setBalances,
+  liabilities,
+  setLiabilities,
 }) {
-  let balances = 0;
-  let liabilities = 0;
+  // const [balances, setBalances] = useState([]);
+  // const [liabilities, setLiabilities] = useState([]);
 
-  if (!loading && data != null) {
-    // Filter depository and investment accounts
-    balances = data.filter(
-      (account) =>
-        account.type === "depository" || account.type === "investment"
-    );
+  const exchangeRates = {
+    USD: 1,
+    GBP: 0.79, // Updated: Jan 16 @ 17:06
+    EUR: 0.92, // Updated: Jan 16 @ 17:06
+  };
 
-    // Filter credit and loan accounts
-    liabilities = data.filter(
-      (account) => account.type === "credit" || account.type === "loan"
-    );
-  }
+  useEffect(() => {
+    if (!loading && data != null) {
+      // Create deep copies for USD, EUR, and GBP
+      const dataUSD = JSON.parse(JSON.stringify(data));
+      const dataEUR = JSON.parse(JSON.stringify(data));
+      const dataGBP = JSON.parse(JSON.stringify(data));
+
+      // Function to perform currency conversion
+      const convertCurrency = (dataArray, targetCurrency) => {
+        return dataArray.map((account) => {
+          const copiedAccount = { ...account };
+          copiedAccount.balances.iso_currency_code = targetCurrency;
+
+          const exchangeRate =
+            exchangeRates[copiedAccount.balances.iso_currency_code];
+
+          if (exchangeRate) {
+            if (copiedAccount.balances.available !== null) {
+              copiedAccount.balances.available = Number(
+                (
+                  parseFloat(copiedAccount.balances.available) * exchangeRate
+                ).toFixed(2)
+              );
+            } else {
+              copiedAccount.balances.current = Number(
+                (
+                  parseFloat(copiedAccount.balances.current) * exchangeRate
+                ).toFixed(2)
+              );
+            }
+          } else {
+            console.error(
+              `Exchange rate not available for ${account.balances.iso_currency_code}`
+            );
+          }
+
+          return copiedAccount;
+        });
+      };
+
+      // Convert each copy to the respective currency
+      const fullUSD = convertCurrency(dataUSD, "USD");
+      const fullEUR = convertCurrency(dataEUR, "EUR");
+      const fullGBP = convertCurrency(dataGBP, "GBP");
+
+      // Set the balances based on the selected currency
+      if (currency === "USD") {
+        // Filter depository and investment accounts
+        const balancesUSD = fullUSD.filter(
+          (account) =>
+            account.type === "depository" || account.type === "investment"
+        );
+
+        // Filter credit and loan accounts
+        const liabilitiesUSD = fullUSD.filter(
+          (account) => account.type === "credit" || account.type === "loan"
+        );
+
+        setBalances(balancesUSD);
+        setLiabilities(liabilitiesUSD);
+      } else if (currency === "EUR") {
+        // Filter depository and investment accounts
+        const balancesEUR = fullEUR.filter(
+          (account) =>
+            account.type === "depository" || account.type === "investment"
+        );
+
+        // Filter credit and loan accounts
+        const liabilitiesEUR = fullEUR.filter(
+          (account) => account.type === "credit" || account.type === "loan"
+        );
+
+        setBalances(balancesEUR);
+        setLiabilities(liabilitiesEUR);
+      } else if (currency === "GBP") {
+        // Filter depository and investment accounts
+        const balancesGBP = fullGBP.filter(
+          (account) =>
+            account.type === "depository" || account.type === "investment"
+        );
+
+        // Filter credit and loan accounts
+        const liabilitiesGBP = fullGBP.filter(
+          (account) => account.type === "credit" || account.type === "loan"
+        );
+
+        setBalances(balancesGBP);
+        setLiabilities(liabilitiesGBP);
+      }
+    }
+  }, [loading, data, currency]);
 
   return (
     <>

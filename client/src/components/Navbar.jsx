@@ -1,9 +1,10 @@
+import React from "react";
 import "./Navbar.css";
 import logo from "../assets/worldwallet-logo.svg";
-import React from "react";
 import { Link } from "react-router-dom";
+import DropDown from "./DropDown";
 
-export default function Navbar({ isAuthenticated }) {
+export default function Navbar({ isAuthenticated, setCurrency }) {
   return (
     <>
       <div className="title-row">
@@ -11,6 +12,7 @@ export default function Navbar({ isAuthenticated }) {
           <img src={logo} alt="" />
           <p>worldwallet</p>
         </div>
+          <DropDown setCurrency={setCurrency}/>
         <nav>
           <ul>
             {isAuthenticated ? (

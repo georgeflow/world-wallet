@@ -66,16 +66,6 @@ const logout = (req, res) => {
   });
 };
 
-// Create a MongoDB session store
-const store = new MongoDBStore({
-  uri: process.env.MONGODB_URI,
-  collection: "sessions", // Collection to store sessions in MongoDB
-});
-
-store.on("error", (error) => {
-  console.log("MongoDB session store error:", error);
-});
-
 // Configuration for the Plaid client
 const config = new Configuration({
   basePath: PlaidEnvironments[process.env.PLAID_ENV],

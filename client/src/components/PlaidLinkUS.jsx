@@ -1,22 +1,21 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { usePlaidLink } from "react-plaid-link";
 import "./PlaidLinkUS.css";
 
 export default function PlaidLinkUS({
-  token,
-  updateToken,
   updateData,
   updateLoading,
   isAuthenticated
 }) {
+  const [token, setToken] = useState(null);
+
   useEffect(() => {
     if (isAuthenticated)
       getBalance();
-  }, [])
+  }, [isAuthenticated])
 
   const onSuccess = useCallback(
     async (publicToken) => {
-      // setLoading(true);
       updateLoading(true);
       await fetch("http://localhost:8080/api/exchange_public_token", {
         method: "POST",
@@ -36,14 +35,14 @@ export default function PlaidLinkUS({
     // For OAuth, use previously generated Link token
     if (window.location.href.includes("?oauth_state_id=")) {
       const linkToken = localStorage.getItem("link_token");
-      updateToken(linkToken);
+      setToken(linkToken);
     } else {
       const response = await fetch("http://localhost:8080/api/create_link_token/us");
       const data = await response.json();
-      updateToken(data.link_token);
+      setToken(data.link_token);
       localStorage.setItem("link_token", data.link_token);
     }
-  }, [updateToken]);
+  }, []);
 
   // Fetch balance data
   const getBalance = React.useCallback(async () => {
@@ -78,7 +77,7 @@ export default function PlaidLinkUS({
     if (isOauth && ready) {
       open();
     }
-  }, [token, isOauth, ready, open]);
+  }, [token, isOauth, ready, open, createLinkToken]);
 
   return (
     <div>

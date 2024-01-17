@@ -20,7 +20,6 @@ apiService.register = async (user) => {
 };
 
 apiService.login = async (user) => {
-  // REMOVE-START
   try {
     const res = await fetch(`${BASE_URL}/login`, {
       method: 'POST',
@@ -33,11 +32,9 @@ apiService.login = async (user) => {
   } catch (err) {
     return console.log(err);
   }
-  // REMOVE-END
 };
 
 apiService.profile = async () => {
-  // REMOVE-START
   try {
     const res = await fetch(`${BASE_URL}/me`, {
       method: 'GET',
@@ -49,11 +46,9 @@ apiService.profile = async () => {
   } catch (err) {
     return console.log(err);
   }
-  // REMOVE-END
 };
 
 apiService.logout = async () => {
-  // REMOVE-START
   try {
     const res = await fetch(`${BASE_URL}/logout`, {
       method: 'POST',
@@ -65,7 +60,6 @@ apiService.logout = async () => {
   } catch (err) {
     return console.log(err);
   }
-  // REMOVE-END
 };
 
 export default apiService;
