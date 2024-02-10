@@ -1,4 +1,4 @@
-# **worldwallet - Enhanced Frontend Edition**
+# **world-wallet - Enhanced Frontend Edition**
 
 A state-of-the-art financial tracker for the international individual, now featuring a TypeScript-enhanced frontend. It connects your diverse bank accounts across the globe and updates your financial status in real-time.
 
